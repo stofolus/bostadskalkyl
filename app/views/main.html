@@ -1,0 +1,102 @@
+<div class="row">
+  <div class="col-md-6 form">
+    <h3>Information</h3>
+    <div class="radio">
+      <label>
+        <input type="radio" id="inputHousingType" ng-model="inputHousingType" value="house">
+        Hus
+      </label>
+    </div>
+    <div class="radio">
+      <label>
+        <input type="radio" id="inputHousingType" ng-model="inputHousingType" value="apartment">
+        Bostadsrätt
+      </label>
+    </div>
+    <div class="form-group">
+      <label for="inputTotalPrice">Bostadspris</label>
+      <input type="text" class="form-control" id="inputTotalPrice" placeholder="" ng-model="inputTotalPrice" ng-change="calculateCosts()">
+    </div>
+    <div class="form-group">
+      <label for="inputMonthCost">Driftkostnad per månad</label>
+      <input type="text" class="form-control" id="inputMonthCost" placeholder="" ng-model="inputMonthCost" ng-change="calculateCosts()">
+    </div>
+    <div class="form-group" ng-show="inputHousingType == 'house'">
+      <label for="inputPledgeLetters">Total summa av pantbrev</label>
+      <input type="text" class="form-control" id="inputPledgeLetters" placeholder="" ng-model="inputPledgeLetters" ng-change="calculateCosts()" >
+    </div>
+    <div class="form-group">
+      <label for="inputCash">Kontantinsats</label>
+      <input type="text" class="form-control" id="inputCash" placeholder="" ng-model="inputCash" ng-change="calculateCosts()">
+    </div>
+    <div class="alert alert-info" role="alert">
+      <p>
+        Kontantinsatsen (15%) är <b>{{ calculatedDeposit }}</b> Kr
+      </p>
+    </div>
+    <h3>Lån</h3>
+    <div class="form-group">
+      <label for="inputBottomInterest">Ränta bottenlån</label>
+      <input type="text" class="form-control" id="inputBottomInterest" placeholder="" ng-model="inputBottomInterest" ng-change="calculateCosts()">
+    </div>
+    <div class="form-group">
+      <label for="inputBottomSum">Summa bottenlån</label>
+      <input type="text" class="form-control" id="inputBottomSum" placeholder="" ng-model="inputBottomSum" ng-change="calculateCosts()">
+    </div>
+    <div class="form-group">
+      <label for="inputTopInterest">Ränta topplån</label>
+      <input type="text" class="form-control" id="inputTopInterest" placeholder="" ng-model="inputTopInterest" ng-change="calculateCosts()">
+    </div>
+    <div class="form-group">
+      <label for="inputTopSum">Summa topplån</label>
+      <input type="text" class="form-control" id="inputTopSum" placeholder="" ng-model="inputTopSum" ng-change="calculateCosts()">
+    </div>
+    <div class="form-group" ng-show="!isDepositEnough()">
+      <label for="inputCashInterest">Ränta blancolån (För att låna till kontantinsatsen)</label>
+      <input type="text" class="form-control" id="inputCashInterest" placeholder="" ng-model="inputCashInterest" ng-change="calculateCosts()" >
+    </div>
+    <div class="alert" ng-class="remainingLoanClass()" role="alert">
+      <p>
+        <b>{{ remainingLoan }}</b> Kr återstår att låna till
+      </p>
+    </div>
+  </div>
+
+  <div class="col-md-6 output">
+    <h3>Resultat</h3>
+    <h5>Direktkostnader</h5>
+    <table class="table">
+      <tr>
+        <td>Kontantinsats</td>
+        <td>{{ resultDirectCost }} Kr</td>
+      </tr>
+      <tr ng-show="inputHousingType == 'house'">
+        <td>Lagfart</td>
+        <td>{{ resultLawfart }} Kr</td>
+      </tr>
+      <tr ng-show="inputHousingType == 'house'">
+        <td>Pantbrev</td>
+        <td>{{ resultPledgeLetters }} Kr</td>
+      </tr>
+    </table>
+    <h5>Månadskostnader</h5>
+    <table class="table">
+      <tr>
+        <td>Driftskostnad</td>
+        <td>{{ resultMonthCost }} Kr</td>
+      </tr>
+      <tr>
+        <td>Bottenlån</td>
+        <td>{{ resultBottomCost }} Kr</td>
+      </tr>
+      <tr>
+        <td>Topplån</td>
+        <td>{{ resultTopCost }} Kr</td>
+      </tr>
+      <tr ng-show="!isDepositEnough()">
+        <td>Blancolån</td>
+        <td>{{ resultDepositCost }} Kr</td>
+      </tr>
+    </table>
+  </div>
+</div>
