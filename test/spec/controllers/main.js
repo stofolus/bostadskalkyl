@@ -16,6 +16,10 @@ describe('Controller: MainCtrl', function () {
     });
   }));
 
+  it('should have a housingType', function () {
+    expect(scope.inputHousingType).toBe('house');
+  });
+
   it('should have an inputTotalPrice', function () {
     expect(scope.inputTotalPrice).toBe(undefined);
   });
