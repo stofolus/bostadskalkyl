@@ -28,6 +28,8 @@ angular.module('bostadskalkylApp')
     $scope.resultDepositCost = 0;
     $scope.remainingLoan = 0;
     $scope.calculatedDeposit = 0;
+    $scope.resultDirectSum = 0;
+    $scope.resultMonthlySum = 0;
 
     $scope.calculateCosts = function() {
         $scope.calculateDirectCost();
@@ -38,6 +40,7 @@ angular.module('bostadskalkylApp')
         $scope.calculateDeposit();
         $scope.calculateLoans();
         $scope.calculateDepositLoan();
+        $scope.calculateSums();
     };
 
     $scope.calculateDirectCost = function() {
@@ -151,8 +154,12 @@ angular.module('bostadskalkylApp')
         var topLoan = $scope.inputTopSum || 0;
         var topInterest = $scope.inputTopInterest || 0;
 
-        bottomInterest = bottomInterest.replace(/,/g, '.');
-        topInterest = topInterest.replace(/,/g, '.');
+        if(typeof bottomInterest === 'string' || bottomInterest instanceof String) {
+            bottomInterest = bottomInterest.replace(/,/g, '.');
+        }
+        if(typeof topInterest === 'string' || topInterest instanceof String){
+            topInterest = topInterest.replace(/,/g, '.');
+        }
 
         var bottomSum = Math.round((bottomLoan * (bottomInterest / 100)) / 12);
         var topSum = Math.round((topLoan * (topInterest / 100)) / 12);
@@ -175,7 +182,11 @@ angular.module('bostadskalkylApp')
             return;
         }
         var depositInterest = $scope.inputCashInterest || 0;
-        depositInterest = depositInterest.replace(/,/g, '.');
+
+        if(typeof depositInterest === 'string' || depositInterest instanceof String) {
+            depositInterest = depositInterest.replace(/,/g, '.');
+        }
+
         var deposit = $scope.calculatedDeposit;
         
         var depositSum = Math.round((deposit * (depositInterest / 100)) / 12);
@@ -185,5 +196,41 @@ angular.module('bostadskalkylApp')
         } else {
             $scope.resultDepositCost = depositSum;
         }
+    };
+
+    $scope.calculateSums = function () {
+        $scope.calculateMonthlySum();
+        $scope.calculateDirectSum();
+    };
+
+    $scope.calculateMonthlySum = function () {
+        var monthlySum = 0;
+        if(!isNaN($scope.resultMonthCost) && $scope.resultMonthCost > 0) {
+            monthlySum += $scope.resultMonthCost;
+        }
+        if(!isNaN($scope.resultBottomCost) && $scope.resultBottomCost > 0) {
+            monthlySum += $scope.resultBottomCost;
+        }
+        if(!isNaN($scope.resultTopCost) && $scope.resultTopCost > 0) {
+            monthlySum += $scope.resultTopCost;
+        }
+        if(!isNaN($scope.resultDepositCost) && $scope.resultDepositCost > 0 && !$scope.isDepositEnough()) {
+            monthlySum += $scope.resultDepositCost;
+        }
+        $scope.resultMonthlySum = monthlySum;
+    };
+
+    $scope.calculateDirectSum = function () {
+        var directSum = 0;
+        if(!isNaN($scope.resultDirectCost) && $scope.resultDirectCost > 0) {
+            directSum += $scope.resultDirectCost;
+        }
+        if(!isNaN($scope.resultLawfart) && $scope.resultLawfart > 0 && $scope.inputHousingType === 'house') {
+            directSum += $scope.resultLawfart;
+        }
+        if(!isNaN($scope.resultPledgeLetters) && $scope.resultPledgeLetters > 0 && $scope.inputHousingType === 'house') {
+            directSum += $scope.resultPledgeLetters;
+        }
+        $scope.resultDirectSum = directSum;
     };
   });

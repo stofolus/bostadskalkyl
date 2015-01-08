@@ -78,6 +78,10 @@
         <td>Pantbrev</td>
         <td>{{ resultPledgeLetters }} Kr</td>
       </tr>
+      <tr>
+        <td>Summa</td>
+        <td>{{ resultDirectSum }} Kr</td>
+      </tr>
     </table>
     <h5>Månadskostnader</h5>
     <table class="table">
@@ -96,6 +100,10 @@
       <tr ng-show="!isDepositEnough()">
         <td>Blancolån</td>
         <td>{{ resultDepositCost }} Kr</td>
+      </tr>
+      <tr>
+        <td>Summa</td>
+        <td>{{ resultMonthlySum }} Kr</td>
       </tr>
     </table>
   </div>
